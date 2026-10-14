@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2299.77">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="ko"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;4인 추첨 이벤트&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>* { box-sizing: border-box; font-family: 'Apple SD Gothic Neo', sans-serif; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body { background: #f0f3f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card-box { background: white; width: 100%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); text-align: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>h2 { color: #2d3436; margin-bottom: 6px; font-size: 22px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>p { color: #636e72; font-size: 13px; margin-bottom: 18px; }</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.input-group { margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.input-group input { width: 100%; padding: 12px; border: 2px solid #dfe4ea; border-radius: 10px; font-size: 15px; text-align: center; outline: none; transition: border-color 0.2s; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.input-group input:focus { border-color: #70a1ff; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card { background: #eccc68; color: #2f3542; border-radius: 14px; height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, background 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card:hover { transform: translateY(-3px); }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.opened { background: #dfe4ea; color: #747d8c; cursor: not-allowed; transform: none; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.win { background: #ff7f50; color: white; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card.lose { background: #ff4757; color: white; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.card .user-tag { font-size: 11px; margin-top: 4px; opacity: 0.9; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-board { background: #f8f9fa; border-radius: 12px; padding: 15px; text-align: left; margin-top: 15px; border: 1px solid #e9ecef; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-board h3 { margin: 0 0 10px 0; font-size: 14px; color: #495057; display: flex; justify-content: space-between; align-items: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-list { list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 160px; overflow-y: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.result-list li { padding: 8px 10px; background: white; border-radius: 8px; margin-bottom: 6px; border: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.badge-win { color: #ff7f50; font-weight: bold; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.badge-lose { color: #ff4757; font-weight: bold; }</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>.admin-btn { background: #a4b0be; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-top: 15px; }</p>
+<p class="p1"><span class="Apple-converted-space">        </span>.admin-btn:hover { background: #747d8c; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="card-box"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;🎁 4인 추첨 이벤트 🎁&lt;/h2&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;p&gt;닉네임을 입력하고 카드를 선택하세요!&lt;br&gt;&lt;b&gt;(당첨 3명 / 💥 꽝 1명)&lt;/b&gt;&lt;/p&gt;</p>
+<p class="p2"><span class="Apple-converted-space">        </span></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="input-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;input type="text" id="username" placeholder="닉네임을 입력해주세용" maxlength="10"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="grid" id="cardGrid"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card" onclick="pickCard(0)" id="card-0"&gt;1번 카드&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card" onclick="pickCard(1)" id="card-1"&gt;2번 카드&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card" onclick="pickCard(2)" id="card-2"&gt;3번 카드&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="card" onclick="pickCard(3)" id="card-3"&gt;4번 카드&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="result-board"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;span&gt;📋 실시간 선택 현황&lt;/span&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/h3&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;ul class="result-list" id="history"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">                </span>&lt;li style="color:#a0aec0; justify-content:center;"&gt;아직 선택한 인원이 없습니다.&lt;/li&gt;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>&lt;/ul&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="admin-btn" onclick="resetGame()"&gt;진행자 전용 판 리셋하기 🔄&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var outcomes = ['🎉 당첨!', '🎉 당첨!', '🎉 당첨!', '💥 꽝'];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var historyData = [];</p>
+<p class="p1"><span class="Apple-converted-space">        </span>var openedCards = [false, false, false, false];</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function shuffleOutcomes() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (var i = outcomes.length - 1; i &gt; 0; i--) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var j = Math.floor(Math.random() * (i + 1));</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var temp = outcomes[i];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>outcomes[i] = outcomes[j];</p>
+<p class="p1"><span class="Apple-converted-space">                </span>outcomes[j] = temp;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function resetGame() {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var password = prompt('진행자 비밀번호를 입력하세요:');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (password !== 'boram1234') {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>if (password !== null) alert('비밀번호가 틀렸습니다!');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>shuffleOutcomes();</p>
+<p class="p1"><span class="Apple-converted-space">            </span>historyData = [];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>openedCards = [false, false, false, false];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('username').value = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('history').innerHTML = '&lt;li style="color:#a0aec0; justify-content:center;"&gt;아직 선택한 인원이 없습니다.&lt;/li&gt;';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>for (var i = 0; i &lt; 4; i++) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>var cardEl = document.getElementById('card-' + i);</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cardEl.className = 'card';</p>
+<p class="p1"><span class="Apple-converted-space">                </span>cardEl.innerHTML = (i + 1) + '번 카드';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p1"><span class="Apple-converted-space">            </span>alert('판이 리셋되었습니다!');</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>function pickCard(index) {</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var nameInput = document.getElementById('username');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var nickname = nameInput.value.trim();</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!nickname) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('카드 뽑기 전 닉네임을 입력해주세용!');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>nameInput.focus();</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (openedCards[index]) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>alert('이미 열린 카드입니다!');</p>
+<p class="p1"><span class="Apple-converted-space">                </span>return;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (!confirm((index + 1) + '번 카드를 뽑으시겠습니까?')) return;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>openedCards[index] = true;</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var result = outcomes[index];</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var cardEl = document.getElementById('card-' + index);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var isWin = result.indexOf('당첨') !== -1;</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardEl.className = 'card opened ' + (isWin ? 'win' : 'lose');</p>
+<p class="p1"><span class="Apple-converted-space">            </span>cardEl.innerHTML = (isWin ? '🎉&lt;br&gt;당첨' : '💥&lt;br&gt;꽝!') + '&lt;div class="user-tag"&gt;' + nickname + '&lt;/div&gt;';</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>if (historyData.length === 0) {</p>
+<p class="p1"><span class="Apple-converted-space">                </span>document.getElementById('history').innerHTML = '';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">            </span>var badgeClass = isWin ? 'badge-win' : 'badge-lose';</p>
+<p class="p1"><span class="Apple-converted-space">            </span>var recordHtml = '&lt;li&gt;&lt;span&gt;&lt;b&gt;' + nickname + '&lt;/b&gt; (' + (index + 1) + '번)&lt;/span&gt;&lt;span class="' + badgeClass + '"&gt;' + result + '&lt;/span&gt;&lt;/li&gt;';</p>
+<p class="p2"><span class="Apple-converted-space">            </span></p>
+<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('history').insertAdjacentHTML('afterbegin', recordHtml);</p>
+<p class="p1"><span class="Apple-converted-space">            </span>historyData.push({ nickname: nickname, card: index + 1, result: result });</p>
+<p class="p1"><span class="Apple-converted-space">            </span>nameInput.value = "";</p>
+<p class="p1"><span class="Apple-converted-space">        </span>}</p>
+<p class="p2"><br></p>
+<p class="p1"><span class="Apple-converted-space">        </span>shuffleOutcomes();</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
