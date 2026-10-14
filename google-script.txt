@@ -1,0 +1,56 @@
+function doGet(e) {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var action = e.parameter.action;
+  
+  if (action === "read") {
+    var data = sheet.getDataRange().getValues();
+    if (data.length === 0 || data[0] === "" || data.length < 2) {
+      return ContentService.createTextOutput(JSON.stringify({status: "empty"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    var outcomes = data[0]; 
+    var opened = data[1].map(function(v) { return v === "true" || v === true; }); 
+    var history = [];
+    
+    for (var i = 2; i < data.length; i++) {
+      if (data[i] && data[i][0]) {
+        history.push({nickname: data[i][0], card: parseInt(data[i][1]), result: data[i][2]});
+      }
+    }
+    
+    return ContentService.createTextOutput(JSON.stringify({
+      status: "success",
+      outcomes: outcomes,
+      openedCards: opened,
+      historyData: history
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  if (action === "pick") {
+    var idx = parseInt(e.parameter.index);
+    var name = e.parameter.nickname;
+    var data = sheet.getDataRange().getValues();
+    
+    if (data[1][idx] === "true" || data[1][idx] === true) {
+      return ContentService.createTextOutput(JSON.stringify({status: "already_opened"})).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    sheet.getRange(2, idx + 1).setValue("true");
+    var resultText = data[0][idx];
+    sheet.appendRow([name, idx + 1, resultText]);
+    
+    return ContentService.createTextOutput(JSON.stringify({status: "success", result: resultText})).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  if (action === "reset") {
+    sheet.clear();
+    var arr = ['🎉 당첨!', '🎉 당첨!', '🎉 당첨!', '💥 꽝'];
+    for (var i = arr.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var temp = arr[i]; arr[i] = arr[j]; arr[j] = temp;
+    }
+    sheet.appendRow(arr); 
+    sheet.appendRow(["false", "false", "false", "false"]); 
+    return ContentService.createTextOutput(JSON.stringify({status: "reset_done"})).setMimeType(ContentService.MimeType.JSON);
+  }
+}
