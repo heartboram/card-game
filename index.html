@@ -115,6 +115,8 @@
             if (!confirm((index + 1) + '번 카드를 뽑으시겠습니까?')) return;
 
             openedCards[index] = true;
+            localStorage.setItem('game_result_' + nickname, result);
+
             var result = outcomes[index];
             var cardEl = document.getElementById('card-' + index);
             var isWin = result.indexOf('당첨') !== -1;
