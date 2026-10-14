@@ -3,41 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>4인 추첨 이벤트</title>
+    <title>4인 실시간 추첨 이벤트</title>
     <style>
         * { box-sizing: border-box; font-family: 'Apple SD Gothic Neo', sans-serif; }
         body { background: #f0f3f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
         .card-box { background: white; width: 100%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); text-align: center; }
         h2 { color: #2d3436; margin-bottom: 6px; font-size: 22px; }
         p { color: #636e72; font-size: 13px; margin-bottom: 18px; }
-        
         .input-group { margin-bottom: 20px; }
         .input-group input { width: 100%; padding: 12px; border: 2px solid #dfe4ea; border-radius: 10px; font-size: 15px; text-align: center; outline: none; transition: border-color 0.2s; }
         .input-group input:focus { border-color: #70a1ff; }
-
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .card { background: #eccc68; color: #2f3542; border-radius: 14px; height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s, background 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .card { background: #eccc68; color: #2f3542; border-radius: 14px; height: 95px; display: flex; flex-direction: column; justify-content: center; align-items: center; font-size: 18px; font-weight: bold; cursor: pointer; transition: transform 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .card:hover { transform: translateY(-3px); }
         .card.opened { background: #dfe4ea; color: #747d8c; cursor: not-allowed; transform: none; }
         .card.win { background: #ff7f50; color: white; }
         .card.lose { background: #ff4757; color: white; }
         .card .user-tag { font-size: 11px; margin-top: 4px; opacity: 0.9; }
-
         .result-board { background: #f8f9fa; border-radius: 12px; padding: 15px; text-align: left; margin-top: 15px; border: 1px solid #e9ecef; }
-        .result-board h3 { margin: 0 0 10px 0; font-size: 14px; color: #495057; display: flex; justify-content: space-between; align-items: center; }
+        .result-board h3 { margin: 0 0 10px 0; font-size: 14px; color: #495057; }
         .result-list { list-style: none; padding: 0; margin: 0; font-size: 14px; max-height: 160px; overflow-y: auto; }
         .result-list li { padding: 8px 10px; background: white; border-radius: 8px; margin-bottom: 6px; border: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }
         .badge-win { color: #ff7f50; font-weight: bold; }
         .badge-lose { color: #ff4757; font-weight: bold; }
-
         .admin-btn { background: #a4b0be; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 12px; cursor: pointer; margin-top: 15px; }
-        .admin-btn:hover { background: #747d8c; }
     </style>
 </head>
 <body>
     <div class="card-box">
-        <h2>🎁 4인 추첨 이벤트 🎁</h2>
-        <p>닉네임을 입력하고 카드를 선택하세요!<br><b>(당첨 3명 / 💥 꽝 1명)</b></p>
+        <h2>🎁 4인 실시간 추첨 이벤트 🎁</h2>
+        <p>닉네임을 입력하고 카드를 선택하세요!<br><b>(실시간 연동 / 당첨 3명 / 💥 꽝 1명)</b></p>
         
         <div class="input-group">
             <input type="text" id="username" placeholder="닉네임을 입력해주세용" maxlength="10">
@@ -51,11 +46,9 @@
         </div>
 
         <div class="result-board">
-            <h3>
-                <span>📋 실시간 선택 현황</span>
-            </h3>
+            <h3>📋 실시간 선택 현황 (3초마다 자동 갱신)</h3>
             <ul class="result-list" id="history">
-                <li style="color:#a0aec0; justify-content:center;">아직 선택한 인원이 없습니다.</li>
+                <li style="color:#a0aec0; justify-content:center;">연동 확인 중...</li>
             </ul>
         </div>
 
@@ -63,81 +56,101 @@
     </div>
 
     <script>
-        var outcomes = ['🎉 당첨!', '🎉 당첨!', '🎉 당첨!', '💥 꽝'];
-        var historyData = [];
+        // ⭐ 중요: 아까 복사한 구글 앱스크립트 웹 앱 URL 주소를 아래 따옴표 안에 꼭 붙여넣어 줘!
+        var SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgm6iyngAaVnW0v1cAquKE7fibmyU_w0pkZgOH_roU5NrVCwU3US_bWMKJLGMWEstN/exec";
+
         var openedCards = [false, false, false, false];
 
-        function shuffleOutcomes() {
-            for (var i = outcomes.length - 1; i > 0; i--) {
-                var j = Math.floor(Math.random() * (i + 1));
-                var temp = outcomes[i];
-                outcomes[i] = outcomes[j];
-                outcomes[j] = temp;
-            }
-        }
+        function loadGameStatus() {
+            if(SCRIPT_URL.indexOf("여기에") !== -1) return;
+            fetch(SCRIPT_URL + "?action=read")
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if (data.status === "empty") {
+                    // 데이터가 아예 비어있으면 강제 첫 리셋 작동
+                    silentReset();
+                    return;
+                }
+                openedCards = data.openedCards;
+                
+                // 카드 UI 업데이트
+                for (var i = 0; i < 4; i++) {
+                    var cardEl = document.getElementById('card-' + i);
+                    if (openedCards[i]) {
+                        var isWin = data.outcomes[i].indexOf('당첨') !== -1;
+                        cardEl.className = 'card opened ' + (isWin ? 'win' : 'lose');
+                        cardEl.innerHTML = (isWin ? '🎉<br>당첨' : '💥<br>꽝!');
+                        
+                        // 해당 카드를 뽑은 유저 매칭해서 이름 달아주기
+                        for(var h=0; h<data.historyData.length; h++) {
+                            if(data.historyData[h].card === (i+1)) {
+                                cardEl.innerHTML += '<div class="user-tag">' + data.historyData[h].nickname + '</div>';
+                            }
+                        }
+                    } else {
+                        cardEl.className = 'card';
+                        cardEl.innerHTML = (i + 1) + '번 카드';
+                    }
+                }
 
-        function resetGame() {
-            var password = prompt('진행자 비밀번호를 입력하세요:');
-            if (password !== 'boram1234') {
-                if (password !== null) alert('비밀번호가 틀렸습니다!');
-                return;
-            }
-
-            shuffleOutcomes();
-            historyData = [];
-            openedCards = [false, false, false, false];
-            document.getElementById('username').value = '';
-            document.getElementById('history').innerHTML = '<li style="color:#a0aec0; justify-content:center;">아직 선택한 인원이 없습니다.</li>';
-
-            for (var i = 0; i < 4; i++) {
-                var cardEl = document.getElementById('card-' + i);
-                cardEl.className = 'card';
-                cardEl.innerHTML = (i + 1) + '번 카드';
-            }
-            alert('판이 리셋되었습니다!');
+                // 히스토리 리스트 출력
+                var historyEl = document.getElementById('history');
+                if (data.historyData.length === 0) {
+                    historyEl.innerHTML = '<li style="color:#a0aec0; justify-content:center;">아직 선택한 인원이 없습니다.</li>';
+                } else {
+                    var html = '';
+                    // 최신 데이터가 위로 오게 역순 배치
+                    for (var i = data.historyData.length - 1; i >= 0; i--) {
+                        var item = data.historyData[i];
+                        var isWin = item.result.indexOf('당첨') !== -1;
+                        var badgeClass = isWin ? 'badge-win' : 'badge-lose';
+                        html += '<li><span><b>' + item.nickname + '</b> (' + item.card + '번)</span><span class="' + badgeClass + '">' + item.result + '</span></li>';
+                    }
+                    historyEl.innerHTML = html;
+                }
+            });
         }
 
         function pickCard(index) {
             var nameInput = document.getElementById('username');
             var nickname = nameInput.value.trim();
 
-            if (!nickname) {
-                alert('카드 뽑기 전 닉네임을 입력해주세용!');
-                nameInput.focus();
-                return;
-            }
-
-            if (openedCards[index]) {
-                alert('이미 열린 카드입니다!');
-                return;
-            }
-
+            if (!nickname) { alert('카드 뽑기 전 닉네임을 입력해주세용!'); nameInput.focus(); return; }
+            if (openedCards[index]) { alert('이미 다른 팀원이 열어본 카드입니다!'); return; }
             if (!confirm((index + 1) + '번 카드를 뽑으시겠습니까?')) return;
 
-            openedCards[index] = true;
-
-            var result = outcomes[index];
-            var cardEl = document.getElementById('card-' + index);
-            var isWin = result.indexOf('당첨') !== -1;
-
-            cardEl.className = 'card opened ' + (isWin ? 'win' : 'lose');
-            cardEl.innerHTML = (isWin ? '🎉<br>당첨' : '💥<br>꽝!') + '<div class="user-tag">' + nickname + '</div>';
-
-            if (historyData.length === 0) {
-                document.getElementById('history').innerHTML = '';
-                localStorage.setItem('game_result_' + nickname, result);
-
-            }
-
-            var badgeClass = isWin ? 'badge-win' : 'badge-lose';
-            var recordHtml = '<li><span><b>' + nickname + '</b> (' + (index + 1) + '번)</span><span class="' + badgeClass + '">' + result + '</span></li>';
-            
-            document.getElementById('history').insertAdjacentHTML('afterbegin', recordHtml);
-            historyData.push({ nickname: nickname, card: index + 1, result: result });
-            nameInput.value = "";
+            fetch(SCRIPT_URL + "?action=pick&index=" + index + "&nickname=" + encodeURIComponent(nickname))
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                if(data.status === "already_opened") {
+                    alert("앗! 방금 전 다른 팀원이 먼저 뽑은 카드입니다. 새로고침 후 다른 카드를 골라주세요!");
+                } else {
+                    alert("선택 완료! 결과를 확인하세요.");
+                }
+                loadGameStatus();
+                nameInput.value = "";
+            });
         }
 
-        shuffleOutcomes();
+        function resetGame() {
+            var password = prompt('진행자 비밀번호를 입력하세요:');
+            if (password !== 'boram1234') { if (password !== null) alert('비밀번호가 틀렸습니다!'); return; }
+            
+            fetch(SCRIPT_URL + "?action=reset")
+            .then(function(res) { return res.json(); })
+            .then(function(data) {
+                alert('중앙 데이터베이스 서버가 리셋되어 새 판이 짜여졌습니다!');
+                loadGameStatus();
+            });
+        }
+
+        function silentReset() {
+            fetch(SCRIPT_URL + "?action=reset").then(function() { loadGameStatus(); });
+        }
+
+        // 3초마다 구글 서버에서 실시간 게임 상황 가져오기 (동기화 치트키 🌟)
+        setInterval(loadGameStatus, 3000);
+        loadGameStatus();
     </script>
 </body>
 </html>
